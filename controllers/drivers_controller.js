@@ -4,6 +4,19 @@ module.exports = {
     greeting(req, res) {
         res.send({ hi : 'there' })
     },
+
+    index(req, res, next) {
+        const { lng, lat } = req.query;
+
+        Driver.geoNear(
+            { type: 'Point', coordinate: [parseFloat(lng), lat]},
+            { spherical: true, maxDistance: 200000}
+
+        )
+
+        .then(drivers => res.send(drivers))
+        .catch(next);
+    },
 //---------------------------------------------------------------------------------------------------------
 // The GET request /\ , The POST request \/ 
 //---------------------------------------------------------------------------------------------------------
